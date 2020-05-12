@@ -29,7 +29,6 @@ public class NaoBater implements Behavior {
 		return sensor.getDistance() < 15;
 	}
 
-
 	public void action() {
 		UltrasonicSensor sensor = Ultra.instance();
 		Motor.A.rotate(360, true);
