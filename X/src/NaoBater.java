@@ -1,61 +1,35 @@
-import java.util.ArrayList;
-
 import lejos.nxt.Motor;
 import lejos.nxt.UltrasonicSensor;
 import lejos.robotics.subsumption.Behavior;
 
 public class NaoBater implements Behavior {
 
-	static int direction = 1;
-	static ArrayList<Integer> directions = new ArrayList<Integer>();
-
 	public boolean takeControl() {
-		Saltos s = new Saltos();
 		UltrasonicSensor sensor = Ultra.instance();
-		Motor.A.rotate(360, true);
-		Motor.C.rotate(-360);
-		if (sensor.getDistance() > 15) {
-			s.setDirections(Directions.ESQUERDA);
-			s.setPai(AndarFrente.salto);
-			AndarFrente.salto.getFilhos().add(s);
-		}
-		Motor.A.rotate((360 * 2) * -1, true);
-		Motor.C.rotate((360 * 2));
-		if (sensor.getDistance() > 15) {
-			s.setDirections(Directions.DIREITA);
-			s.setPai(AndarFrente.salto);
-			AndarFrente.salto.getFilhos().add(s);
-		}
-		return sensor.getDistance() < 15;
+		return sensor.getDistance() < 20;
 	}
 
 	public void action() {
-		UltrasonicSensor sensor = Ultra.instance();
-		Motor.A.rotate(360, true);
-		Motor.C.rotate(-360);
-		if (sensor.getDistance() > 15) {
-			for (Saltos s : AndarFrente.salto.getFilhos()) {
-				if (s.getDirections().equals(Directions.ESQUERDA)) {
-					s.setDirections(Directions.ESQUERDA);
-					AndarFrente.salto = s;
-				} 
+		// logica gira para realmente girar se o pai tem filhos
+		for (Saltos s : AndarFrente.salto.getFilhos()) {
+			if (s.getDirections().equals(Directions.ESQUERDA)) {
+				s.setDirections(Directions.ESQUERDA);
+				AndarFrente.salto = s;
+				Motor.A.rotate(360, true);
+				Motor.C.rotate(-360);
+				return;
 			}
-			return;
-		}
-		Motor.A.rotate((360 * 2) * -1, true);
-		Motor.C.rotate((360 * 2));	
-		if (sensor.getDistance() > 15) {
-			for (Saltos s : AndarFrente.salto.getFilhos()) {
-				if (s.getDirections().equals(Directions.DIREITA)) {
-					s.setDirections(Directions.DIREITA);
-					AndarFrente.salto = s;
-				} 
+			if (s.getDirections().equals(Directions.DIREITA)) {
+				s.setDirections(Directions.DIREITA);
+				AndarFrente.salto = s;
+				Motor.A.rotate(-360, true);
+				Motor.C.rotate(360);
+				return;
 			}
-			return;
 		}
 		AndarFrente.salto = AndarFrente.salto.getPai();
-		Motor.A.rotate(-360, true);
-		Motor.C.rotate(-360);
+		Motor.A.rotate(-750, true);
+		Motor.C.rotate(-750);
 		action();
 	}
 

@@ -2,11 +2,11 @@ import lejos.robotics.subsumption.Arbitrator;
 import lejos.robotics.subsumption.Behavior;
 
 public class App {
-
-	public static Saltos saltos = new Saltos();
 	
 	public static void main(String[] args) {
-		saltos.setDirections(Directions.EM_FRENTE);
+		Saltos s = new Saltos();
+		AndarFrente.salto = s;
+		AndarFrente.salto.setDirections(Directions.EM_FRENTE);
 		Behavior andar = new AndarFrente();
 		Behavior desviar = new NaoBater();
 		

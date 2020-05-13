@@ -1,20 +1,20 @@
 import lejos.nxt.Motor;
+import lejos.nxt.UltrasonicSensor;
 import lejos.robotics.subsumption.Behavior;
 
 public class AndarFrente implements Behavior {
 
-	public static Saltos salto;
+	public static Saltos salto = new Saltos();
 
 	public boolean takeControl() {
 		return true;
 	}
 
 	public void action() {
+		// frente
+		Motor.A.rotate(750, true);
+		Motor.C.rotate(750);
 		Saltos s = new Saltos();
-		// seta o primeiro nó
-		if (salto == null) {
-			salto = App.saltos;
-		}
 		s.setDirections(Directions.EM_FRENTE);
 		// seta o salto pai
 		s.setPai(salto);
@@ -29,9 +29,35 @@ public class AndarFrente implements Behavior {
 				e.printStackTrace();
 			}
 		}
+		UltrasonicSensor sensor = Ultra.instance();
+		// logica gira para o lado para verificar se pode virar
+		Motor.A.rotate(360, true);
+		Motor.C.rotate(-360);
+		if (sensor.getDistance() > 25) {
+			Saltos s1 = new Saltos();
+			s1.setPai(s);
+			s1.setDirections(Directions.ESQUERDA);
+			s.getFilhos().add(s1);
+			Motor.A.rotate(100, true);
+			Motor.C.rotate(-100);
+			Motor.A.rotate(-100, true);
+			Motor.C.rotate(100);
+		}
+		Motor.A.rotate((360 * 2) * -1, true);
+		Motor.C.rotate((360 * 2));
+		if (sensor.getDistance() > 25) {
+			Saltos s1 = new Saltos();
+			s1.setPai(s);
+			s1.setDirections(Directions.DIREITA);
+			s.getFilhos().add(s1);
+			Motor.A.rotate(100, true);
+			Motor.C.rotate(-100);
+			Motor.A.rotate(-100, true);
+			Motor.C.rotate(100);
+		}
 		salto = s;
-		Motor.A.rotate(100, true);
-		Motor.C.rotate(100);
+		Motor.A.rotate(360, true);
+		Motor.C.rotate(-360);
 	}
 
 	public void suppress() {
