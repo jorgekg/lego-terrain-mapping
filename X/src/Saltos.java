@@ -1,11 +1,11 @@
 import java.util.ArrayList;
 
-
 public class Saltos {
 
 	private Directions directions;
 	private Saltos pai;
 	private ArrayList<Saltos> filhos = new ArrayList<Saltos>();
+	private boolean ehObjetivo = false;
 	
 	public Saltos getPai() {
 		return pai;
@@ -24,5 +24,11 @@ public class Saltos {
 	}
 	public void setDirections(Directions directions) {
 		this.directions = directions;
+	}
+	public boolean isEhObjetivo() {
+		return ehObjetivo;
+	}
+	public void setEhObjetivo(boolean ehObjetivo) {
+		this.ehObjetivo = ehObjetivo;
 	}
 }

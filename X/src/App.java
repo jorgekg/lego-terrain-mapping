@@ -3,6 +3,8 @@ import lejos.robotics.subsumption.Behavior;
 
 public class App {
 	
+	public static boolean temBranco = false;
+	
 	public static void main(String[] args) {
 		Saltos s = new Saltos();
 		AndarFrente.salto = s;

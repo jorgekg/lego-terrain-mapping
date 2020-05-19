@@ -24,6 +24,7 @@ public class NaoBater implements Behavior {
 				AndarFrente.salto = s;
 				Motor.A.rotate(-360, true);
 				Motor.C.rotate(360);
+				AndarFrente.ehDireitaOuEsqerda = true;
 				return;
 			}
 		}
